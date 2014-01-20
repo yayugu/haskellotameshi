@@ -34,7 +34,7 @@ getStats_ h buffer = do
     text_ <- hGetLine h
     if text_ == "END\r"
         then return buffer
-        else getStats_ h (buffer ++ text_)
+        else getStats_ h (buffer ++ "\n" ++ text_)
 
 getStats :: Handle -> IO String
 getStats h = do
@@ -46,7 +46,7 @@ client :: IO ()
 client = withSocketsDo $ do
     h <- connectTo "localhost" 11211
     str <- getStats h
-    putStrLn str
+    mapM_ putChar str
     hClose h
 
 main :: IO ()
